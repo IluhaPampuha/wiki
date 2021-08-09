@@ -1,29 +1,104 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-import random
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import User
+from django.db import IntegrityError
+from django.contrib.auth import login, logout, authenticate
+from .models import Company, Messages
+from .forms import CompanyForm, IncomingForm, OutgoingForm
 
 
 # Create your views here.
 
 def wiki(request):
-    return render(request, 'wiki_app/home.html')
+    company = Company.objects.all()
+    if request.method == "GET":
+        return render(request, 'wiki_app/home.html', {"company": company, "form": CompanyForm()})
+    else:
+        try:
+            form = CompanyForm(request.POST)
+            newcompany = form.save(commit=False)
+            newcompany.user = request.user
+            newcompany.save()
+            return redirect("/")
+        except ValueError:
+            return render(request, 'wiki_app/home.html',
+                          {"company": company, "form": CompanyForm(),
+                           "error": "Для добавления организации необходимо авторизоваться"})
 
 
-def password(request):
-    characters = list("abcdefghijklmnopqrstuvwxyz")
-    if request.GET.get("uppercase"):
-        characters.extend(list("ABCDEFGHIJKLMNOPQRSTUVWXYZ"))
-    if request.GET.get("numbers"):
-        characters.extend(list("1234567890"))
-    if request.GET.get("special"):
-        characters.extend("!@#$%^&*()_+")
-    length = int(request.GET.get("length", 12))
-    if length > 14: length = 14
-    elif length < 6: length = 6
-    thepassword = ""
-    for x in range(length):
-        thepassword += random.choice(characters)
-    return render(request, 'wiki_app/password.html', {"password": thepassword})
+def detail(request, id):
+    messages = Messages.objects.filter(id_company=id)
+    company = get_object_or_404(Company, pk=id)
+    return render(request, "wiki_app/detail.html", {"company": company, "messages": messages})
 
-def about(request):
-    return render(request, 'wiki_app/about.html')
+
+def incoming(request, id):
+    messages = Messages.objects.filter(id_company=id)
+    company = get_object_or_404(Company, pk=id)
+    if request.method == "GET":
+        return render(request, "wiki_app/incoming.html",
+                      {"company": company, "messages": messages, "form": IncomingForm()})
+    else:
+        try:
+            form = IncomingForm(request.POST)
+            newincoming = form.save(commit=False)
+            newincoming.user = request.user
+            newincoming.save()
+            return redirect(f"/company{id}/")
+        except ValueError:
+            return render(request, "wiki_app/incoming.html",
+                          {"company": company, "messages": messages, "form": IncomingForm(),
+                           "error": "Для добавления организации необходимо авторизоваться"})
+
+
+def outgoing(request, id):
+    messages = Messages.objects.filter(id_company=id)
+    company = get_object_or_404(Company, pk=id)
+    if request.method == "GET":
+        return render(request, "wiki_app/outgoing.html",
+                      {"company": company, "messages": messages, "form": OutgoingForm()})
+    else:
+        form = OutgoingForm(request.POST)
+        newoutgoing = form.save(commit=False)
+        newoutgoing.user = request.user
+        newoutgoing.save()
+        return redirect(f"/company{id}/")
+
+
+def signupuser(request):
+    if request.method == "GET":
+        return render(request, 'wiki_app/signupuser.html', {"form": UserCreationForm()})
+    else:
+        # Создание нового пользователя
+        if request.POST["password1"] == request.POST["password2"]:
+            try:
+                user = User.objects.create_user(request.POST["username"], password=request.POST["password1"])
+                user.save()
+                login(request, user)
+                return redirect("/")
+            except IntegrityError:
+                return render(request, 'wiki_app/signupuser.html',
+                              {"form": UserCreationForm(), 'error': "Имя пользователя уже используется"})
+
+        else:
+            return render(request, 'wiki_app/signupuser.html',
+                          {"form": UserCreationForm(), 'error': "Пароли не совпадают"})
+
+
+def logoutuser(request):
+    if request.method == "POST":
+        logout(request)
+        return redirect("/")
+
+
+def loginuser(request):
+    if request.method == "GET":
+        return render(request, 'wiki_app/loginuser.html', {"form": AuthenticationForm()})
+    else:
+        user = authenticate(request, username=request.POST["username"], password=request.POST["password"])
+        if user is None:
+            return render(request, 'wiki_app/loginuser.html',
+                          {"form": AuthenticationForm(), "error": "Имя пользователя или пароль некорректны"})
+        else:
+            login(request, user)
+            return redirect("/")

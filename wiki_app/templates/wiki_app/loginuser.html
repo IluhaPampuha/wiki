@@ -1,0 +1,16 @@
+{% extends 'wiki_app/base.html' %}
+{% block title %}Страница входа пользователя{% endblock %}
+
+{% block content %}
+<h2>Страница входа пользователя</h2>
+
+<h3>{{ error }}</h3> <br>
+
+<form method="POST" action="">
+    {% csrf_token%}
+    {{ form.as_p }}
+<button type="submit">Войти</button>
+</form>
+
+{% endblock %}
+

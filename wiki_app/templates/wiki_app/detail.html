@@ -1,0 +1,16 @@
+{% extends 'wiki_app/base.html' %}
+{% block title %}Письма {{ company.name }}{% endblock %}
+
+{% block content %}
+<h1>Письма {{ company.name }}</h1>
+{% for message in messages %}
+    <h4>{% if message.incoming_number != "" %}{{ message.incoming_number }} |{% endif %}
+        {% if message.incoming_date is not Null %}{{ message.incoming_date }} |{% endif %}
+        {% if message.outgoing_number != "" %}{{message.outgoing_number}} |{% endif %}
+        {% if message.outgoing_date is not Null %}{{message.outgoing_date}} |{% endif %}
+        {% if message.date_sign is not Null %}{{ message.date_sign }} |{% endif %}
+        {% if message.number_sign != "" %}{{ message.number_sign }} |{% endif %}
+        {{ message.information }} | {{message.user}}</h4>
+{% endfor %}
+<a href="{% url 'incoming' company.id %}">Добавить входящее письмо</a> | <a href="{% url 'outgoing' company.id %}">Добавить исходящее письмо</a>
+{% endblock %}

@@ -1,31 +1,17 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Wiki 2.0</title>
-</head>
-<body>
-	<form action="{% url 'pass' %}">
-        <select name="length">
-            <option value="6">six</option>
-            <option value="7">seven</option>
-            <option value="8">eight</option>
-            <option value="9">nine</option>
-            <option value="10">ten</option>
-            <option value="11">eleven</option>
-            <option value="12" selected="selected">tvalve</option>
-            <option value="13">thirteen</option>
-            <option value="14">fourteen</option>
-        </select>
-        <br>
-        <input type="checkbox" name="uppercase"> Uppercase<br>
-        <input type="checkbox" name="numbers"> Numbers<br>
-        <input type="checkbox" name="special"> Special<br>
-        <input type="submit" value="Создать">
-    </form>
-<a href="{% url 'about' %}">О нас</a>
-</body>
-</html>
+{% extends 'wiki_app/base.html' %}
+{% block title %}Письма {{ company.name }}{% endblock %}
+
+{% block content %}
+{% for company in company %}
+    <h4>{{ company.id }}. <a href="{% url 'detail' company.id %}">{{ company.name }}</a></h4>
+{% endfor %}
+
+<h2>Добавить компанию</h2>
+<h2>{{ error }}</h2>
+<form method="POST">
+    {% csrf_token%}
+    {{ form.as_p }}
+<button type="submit">Добавить</button>
+</form>
+
+{% endblock %}

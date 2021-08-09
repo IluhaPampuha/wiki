@@ -1,0 +1,16 @@
+{% extends 'wiki_app/base.html' %}
+{% block title %}Добавить исходящее письмо{{ company.name }}{% endblock %}
+
+{% block content %}
+<h2>Добавить входящее письмо организации {{ company.name }}</h2>
+<h2>{{ error }}</h2>
+<form method="POST">
+    {% csrf_token%}
+     {{ company.id }}
+    {{ form.outgoing_number }}
+    {{ form.outgoing_date}}
+    {{ form.information }}
+<button type="submit">Добавить</button>
+</form>
+
+{% endblock %}
