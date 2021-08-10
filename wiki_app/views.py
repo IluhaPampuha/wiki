@@ -36,33 +36,36 @@ def incoming(request, id):
     messages = Messages.objects.filter(id_company=id)
     company = get_object_or_404(Company, pk=id)
     if request.method == "GET":
-        return render(request, "wiki_app/incoming.html",
-                      {"company": company, "messages": messages, "form": IncomingForm()})
+        return render(request, "wiki_app/incoming.html", {"company": company, "messages": messages, "form": IncomingForm()})
     else:
         try:
             form = IncomingForm(request.POST)
-            newincoming = form.save(commit=False)
-            newincoming.user = request.user
-            newincoming.save()
-            return redirect(f"/company{id}/")
+            if form.is_valid():
+                newincoming = form.save(commit=False)
+                newincoming.user = request.user
+                newincoming.save()
+                return redirect(f"/company{id}/")
         except ValueError:
             return render(request, "wiki_app/incoming.html",
-                          {"company": company, "messages": messages, "form": IncomingForm(),
-                           "error": "Для добавления организации необходимо авторизоваться"})
+                          {"company": company, "messages": messages, "form": IncomingForm(), "error": "Для добавления организации необходимо авторизоваться"})
 
 
 def outgoing(request, id):
     messages = Messages.objects.filter(id_company=id)
     company = get_object_or_404(Company, pk=id)
     if request.method == "GET":
-        return render(request, "wiki_app/outgoing.html",
-                      {"company": company, "messages": messages, "form": OutgoingForm()})
+        return render(request, "wiki_app/outgoing.html", {"company": company, "messages": messages, "form": OutgoingForm()})
     else:
-        form = OutgoingForm(request.POST)
-        newoutgoing = form.save(commit=False)
-        newoutgoing.user = request.user
-        newoutgoing.save()
-        return redirect(f"/company{id}/")
+        try:
+            form = OutgoingForm(request.POST)
+            if form.is_valid():
+                newoutgoing = form.save(commit=False)
+                newoutgoing.user = request.user
+                newoutgoing.save()
+                return redirect(f"/company{id}/")
+        except ValueError:
+            return render(request, "wiki_app/outgoing.html",
+                          {"company": company, "messages": messages, "form": OutgoingForm(), "error": "Для добавления организации необходимо авторизоваться"})
 
 
 def signupuser(request):

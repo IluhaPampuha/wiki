@@ -2,14 +2,16 @@
 {% block title %}Добавить исходящее письмо{{ company.name }}{% endblock %}
 
 {% block content %}
+<h4><a href="{% url 'wiki' %}">На главную</a></h4>
 <h2>Добавить входящее письмо организации {{ company.name }}</h2>
 <h2>{{ error }}</h2>
 <form method="POST">
     {% csrf_token%}
-     {{ company.id }}
-    {{ form.outgoing_number }}
-    {{ form.outgoing_date}}
-    {{ form.information }}
+    <input type="hidden" name="id_company" value="{{ company.id }}" required id="id_id_company">
+    <p><label for="id_outgoing_number">Исходящий номер:</label> <input value="149/2/7" type="text" name="outgoing_number" maxlength="250" id="id_outgoing_number"></p>
+<p><label for="id_outgoing_date">Дата исходящего:</label> <input type="date" name="outgoing_date" id="id_outgoing_date"></p>
+<p><label for="id_information">Информация:</label> <textarea name="information" cols="40" rows="10" id="id_information">
+</textarea></p>
 <button type="submit">Добавить</button>
 </form>
 

@@ -1,15 +1,15 @@
-from django.forms import ModelForm
+from django import forms
 from .models import Company, Messages
 
 
-class CompanyForm(ModelForm):
+class CompanyForm(forms.ModelForm):
     class Meta:
         model = Company
         fields = ['name']
         labels = {'name': 'Название компании'}
 
 
-class IncomingForm(ModelForm):
+class IncomingForm(forms.ModelForm):
     class Meta:
         model = Messages
         fields = ['id_company', 'incoming_number', 'incoming_date', 'number_sign', 'date_sign', 'information']
@@ -17,7 +17,7 @@ class IncomingForm(ModelForm):
                   'number_sign': 'Подписной номер', 'date_sign': 'Дата подписи', 'information': 'Информация'}
 
 
-class OutgoingForm(ModelForm):
+class OutgoingForm(forms.ModelForm):
     class Meta:
         model = Messages
         fields = ['id_company', 'outgoing_number', 'outgoing_date', 'information']
