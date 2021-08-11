@@ -24,6 +24,7 @@ urlpatterns = [
     path('company<int:id>/', views.detail, name="detail"),
     path('company<int:id>/incoming/', views.incoming, name="incoming"),
     path('company<int:id>/outgoing/', views.outgoing, name="outgoing"),
+    path('message<int:id_message>/', views.message, name="message"),
 
     #Авторизация
     path('signup/', views.signupuser, name="signupuser"),

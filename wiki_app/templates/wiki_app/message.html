@@ -1,0 +1,9 @@
+{% extends 'wiki_app/base.html' %}
+{% block title %}Страница входа пользователя{% endblock %}
+
+{% block content %}
+<h4><a href="{% url 'wiki' %}">На главную</a></h4>
+<h2>Информация о письме</h2>
+{{ messages.information }}
+
+{% endblock %}

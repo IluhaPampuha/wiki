@@ -2,10 +2,11 @@
 {% block title %}Письма {{ company.name }}{% endblock %}
 
 {% block content %}
+<ol>
 {% for company in company %}
-    <h4>{{ company.id }}. <a href="{% url 'detail' company.id %}">{{ company.name }}</a></h4>
+    <li><a href="{% url 'detail' company.id %}">{{ company.name }}</a></li>
 {% endfor %}
-
+</ol>
 <h2>Добавить компанию</h2>
 <h2>{{ error }}</h2>
 <form method="POST">

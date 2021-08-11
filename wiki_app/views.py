@@ -31,6 +31,10 @@ def detail(request, id):
     company = get_object_or_404(Company, pk=id)
     return render(request, "wiki_app/detail.html", {"company": company, "messages": messages})
 
+def message(request, id_message):
+    messages = get_object_or_404(Messages, pk=id_message)
+    return render(request, "wiki_app/message.html", {"messages": messages})
+
 
 def incoming(request, id):
     messages = Messages.objects.filter(id_company=id)
