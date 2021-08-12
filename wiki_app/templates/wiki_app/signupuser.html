@@ -4,10 +4,12 @@
 {% block content %}
 <h2>Страница регистрации пользователя</h2> <br>
 <h3>{{ error }}</h3> <br>
-<form method="POST" action="">
+<form method="POST" action="" >
+    <div class="mb-3">
     {% csrf_token%}
     {{ form.as_p }}
-<button type="submit">Зарегистрироваться</button>
+<button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+</div>
 </form>
 {% endblock %}
 

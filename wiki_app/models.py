@@ -7,7 +7,7 @@ class Company(models.Model):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return self.name
+        return str(self.id)
 
 
 class Messages(models.Model):

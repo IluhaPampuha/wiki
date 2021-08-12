@@ -4,6 +4,20 @@
 {% block content %}
 <h4><a href="{% url 'wiki' %}">На главную</a></h4>
 <h2>Информация о письме</h2>
-{{ messages.information }}
+{{ messages.information }}<br>
+<br>
+<br>
+<h2>Форма для изменения письма</h2>
+{{ error }}
+<form method="POST">
+    {% csrf_token%}
+    {{ form.as_p }}
+    <button type="submit">Редактировать письмо</button>
+</form>
+
+<form method="POST" action="{% url 'deletemessage' messages.id %}">
+    {% csrf_token%}
+<button type="submit">Удалить письмо</button>
+</form>
 
 {% endblock %}
