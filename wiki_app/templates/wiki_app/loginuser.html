@@ -2,15 +2,35 @@
 {% block title %}Страница входа пользователя{% endblock %}
 
 {% block content %}
-<h2>Страница входа пользователя</h2>
-
-<h3>{{ error }}</h3> <br>
-
-<form method="POST" action="">
-    {% csrf_token%}
-    {{ form.as_p }}
-<button type="submit" class="btn btn-dark">Войти</button>
-</form>
-
+<div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+            <h2>Вход</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+            {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">Имя пользователя</label>
+                    <input type="text" name="username" class="form-control" id="username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <input type="password" name="password" class="form-control" id="password">
+                </div>
+                <h1></h1><h1><button  type="submit" class="btn btn-dark">Войти</button></h1>
+            </form>
+            <hr>
+            <div class="text-center">
+                Нужен аккаунт? <a href="{% url 'signupuser' %}">Зарегистрироваться</a>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 

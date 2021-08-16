@@ -2,8 +2,7 @@
 {% block title %}Добавить исходящее письмо{{ company.name }}{% endblock %}
 
 {% block content %}
-<h4><a href="{% url 'wiki' %}">На главную</a></h4>
-<h2>Добавить входящее письмо организации {{ company.name }}</h2>
+<h2>Добавить исходящее письмо в {{ company.name }}</h2>
 <h2>{{ error }}</h2>
 <form method="POST">
     {% csrf_token%}

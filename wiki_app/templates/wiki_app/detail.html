@@ -2,8 +2,8 @@
 {% block title %}Письма {{ company.name }}{% endblock %}
 
 {% block content %}
-<h4><a href="{% url 'wiki' %}">На главную</a></h4>
-<a href="{% url 'incoming' company.id %}">Добавить входящее письмо</a> | <a href="{% url 'outgoing' company.id %}">Добавить исходящее письмо</a>
+<a href="{% url 'incoming' company.id %}" class="btn btn-dark">Добавить входящее письмо</a>
+<a href="{% url 'outgoing' company.id %}" class="btn btn-dark">Добавить исходящее письмо</a>
 <h1>Письма {{ company.name }}</h1>
 {% for message in messages %}
     <p><a href="{% url 'message' message.id %}">{% if message.incoming_number != "" %}{{ message.incoming_number }} |{% endif %}
