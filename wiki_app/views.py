@@ -5,6 +5,7 @@ from django.db import IntegrityError
 from django.contrib.auth import login, logout, authenticate
 from .models import Company, Messages
 from .forms import CompanyForm, IncomingForm, OutgoingForm
+from django.db.models import Q
 
 
 # Create your views here.
@@ -31,6 +32,18 @@ def detail(request, id):
     company = get_object_or_404(Company, pk=id)
     return render(request, "wiki_app/detail.html", {"company": company, "messages": messages})
 
+def serach_tool(request):
+    search_query = request.GET.get("search", "")
+    if search_query:
+        messages = Messages.objects.filter(Q(information__icontains=search_query) | Q(incoming_number=search_query) | Q(outgoing_number=search_query) | Q(number_sign=search_query))
+        company = Company.objects.filter(name__icontains=search_query)
+        return render(request, "wiki_app/search.html", {"company": company, "messages": messages})
+    else:
+        try:
+            raise ValueError("Поля поиска пустое")
+        except ValueError:
+            company = Company.objects.all()
+            return render(request, 'wiki_app/home.html', {"company": company, "form": CompanyForm(),"error1": "Введите значение поиска"})
 
 def message(request, id_message):
     messages = get_object_or_404(Messages, pk=id_message)
@@ -145,3 +158,6 @@ def deletemessage(request, id_message):
     if request.method == "POST":
         messages.delete()
         return redirect(f"/company{id}/")
+
+
+

@@ -26,6 +26,7 @@ urlpatterns = [
     path('company<int:id>/outgoing/', views.outgoing, name="outgoing"),
     path('message<int:id_message>/', views.message, name="message"),
     path('message<int:id_message>/deleted', views.deletemessage, name="deletemessage"),
+    path('search/', views.serach_tool, name="search"),
 
     #Авторизация
     path('signup/', views.signupuser, name="signupuser"),

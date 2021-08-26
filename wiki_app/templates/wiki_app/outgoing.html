@@ -2,16 +2,26 @@
 {% block title %}Добавить исходящее письмо{{ company.name }}{% endblock %}
 
 {% block content %}
+<div class="text-center">
 <h2>Добавить исходящее письмо в {{ company.name }}</h2>
-<h2>{{ error }}</h2>
+    </div>
+{% if error %}
+<div class="alert alert-danger" role="alert">
+    {{ error }}
+</div>
+{% endif %}
+ <div class="row justify-content-center">
+    <div class="col-md-8">
 <form method="POST">
     {% csrf_token%}
     <input type="hidden" name="id_company" value="{{ company.id }}" required id="id_id_company">
-    <p><label for="id_outgoing_number">Исходящий номер:</label> <input value="149/2/7" type="text" name="outgoing_number" maxlength="250" id="id_outgoing_number"></p>
-<p><label for="id_outgoing_date">Дата исходящего:</label> <input type="date" name="outgoing_date" id="id_outgoing_date"></p>
-<p><label for="id_information">Информация:</label> <textarea name="information" cols="40" rows="10" id="id_information">
+    <p><label for="id_outgoing_number" class="form-label">Исходящий номер:</label> <input class="form-control me-2" value="149/2/7" type="text" name="outgoing_number" maxlength="250" id="id_outgoing_number"></p>
+<p><label for="id_outgoing_date" class="form-label">Дата исходящего:</label> <input class="form-control me-2" type="date" name="outgoing_date" id="id_outgoing_date"></p>
+<p><label for="id_information" class="form-label">Информация:</label> <textarea class="form-control me-2" name="information" cols="40" rows="10" id="id_information">
 </textarea></p>
-<button type="submit">Добавить</button>
+<button style="margin-top: 15px;" type="submit" class="btn btn-dark">Добавить</button>
 </form>
+    </div>
+ </div>
 
 {% endblock %}

@@ -2,20 +2,35 @@
 {% block title %} Wiki 2.0 {% endblock %}
 
 {% block content %}
-<ol>
-{% for company in company %}
-    <li><a href="{% url 'detail' company.id %}">{{ company.name }}</a></li>
-{% endfor %}
-</ol>
-<h2>Добавить компанию</h2>
-<h2>{{ error }}</h2>
-
-<form method="POST" class="row g-3">
+  <div class="row">
+    <div class="col-md-4">
+        <div class="text-center">
+        <h2>Добавить организацию</h2>
+        </div>
+{% if error %}
+<div class="alert alert-danger" role="alert">
+    {{ error }}
+</div>
+{% endif %}
+<form method="POST">
     {% csrf_token%}
     <div class="form-group">
-        <label for="id_name" class="form-label">Название компании: </label> <input type="text" name="name" id="id_name" class="form-control">
-        <button type="submit" class="btn btn-dark">Добавить</button>
+        <label for="id_name" class="form-label">Название компании:</label>
+        <input class="form-control me-2" type="text" name="name" id="id_name">
     </div>
+        <button style="margin-top: 15px;" type="submit" class="btn btn-dark">Добавить</button>
 </form>
+    </div>
+    <div class="col-md-8 text-center">
+        <h2 >Список организаций</h2>
+<div class="list-group list-group-flush">
+{% for company in company %}
+    <a href="{% url 'detail' company.id %}" class="list-group-item list-group-item-action text-center">{{ company.name }}</a>
+{% endfor %}
+   </div>
+    </div>
+  </div>
+
+
 
 {% endblock %}
