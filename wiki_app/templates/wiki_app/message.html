@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-lg-5">
         <div class="text-center">
             <h2>Информация о письме</h2>
         </div>
@@ -54,7 +54,7 @@
             </tbody>
         </table>
     </div>
-    <div class="col-md-6">
+    <div class="col-lg-7">
         <div class="text-center">
             <h2>Форма для изменения письма</h2>
         </div>
@@ -70,15 +70,8 @@
         {% endif %}
         <form method="POST">
             {% csrf_token%}
-            <input type="hidden" name="id_company" value="{{ company.id }}" required id="id_id_company">
-        {% if messages.incoming_number %}<label for="id_incoming_number" class="form-label">Входящий номер:</label> <input class="form-control me-2" type="text" name="incoming_number" maxlength="250" id="id_incoming_number">
-            {% else%}<label for="id_outgoing_number" class="form-label">Исходящий номер:</label><input class="form-control me-2" value="149/2/7" type="text" name="outgoing_number" maxlength="250" id="id_outgoing_number">{% endif %}
-        {% if messages.incoming_date %}<label for="id_incoming_date" class="form-label">Дата входящего:</label> <input class="form-control me-2" type="date"  name="incoming_date" id="id_incoming_date">
-            {% else%}<label for="id_outgoing_date" class="form-label">Дата исходящего:</label> <input class="form-control me-2" type="date" name="outgoing_date" id="id_outgoing_date">{% endif %}
-        {% if messages.number_sign %}<label for="id_number_sign" class="form-label">Подписной номер:</label> <input class="form-control me-2" type="text" name="number_sign" maxlength="250" id="id_number_sign">{% endif %}
-        {% if messages.date_sign%}<label for="id_date_sign" class="form-label">Дата подписи:</label> <input class="form-control me-2" type="date" name="date_sign" id="id_date_sign">{% endif %}
-        <label for="id_information" class="form-label">Информация:</label><textarea class="form-control me-2" name="information" cols="40" rows="10" id="id_information"></textarea>
-            <button type="submit" class="btn btn-dark" style="margin-top: 15px;"
+            <table class="table table-striped">{{ form.as_table }}</table>
+            <button type="submit" class="btn btn-dark"
                     onclick="return confirm('Вы уверены, что хотите редактировать письмо?')">Редактировать письмо
             </button>
         </form>
