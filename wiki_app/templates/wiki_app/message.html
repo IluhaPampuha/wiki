@@ -1,27 +1,93 @@
 {% extends 'wiki_app/base.html' %}
-{% block title %}Страница входа пользователя{% endblock %}
+{% block title %}Письмо {% endblock %}
 
 {% block content %}
-
-<h2>Информация о письме</h2>
-{{ messages.information }}<br>
-<br>
-<br>
-<h2>Форма для изменения письма</h2>
-{% if error %}
-<div class="alert alert-danger" role="alert">
-    {{ error }}
+<div class="row">
+    <div class="col-md-6">
+        <div class="text-center">
+            <h2>Информация о письме</h2>
+        </div>
+        <table class="table table-striped">
+            <tbody>
+            {% if messages.incoming_number %}
+            <tr>
+                <td>Входящий номер:</td>
+                <td>{{ messages.incoming_number }}</td>
+            </tr>
+            {% endif %}
+            {% if messages.incoming_date %}
+            <tr>
+                <td>Дата входящего:</td>
+                <td>{{ messages.incoming_date }}</td>
+            </tr>
+            {% endif %}
+            {% if messages.outgoing_number %}
+            <tr>
+                <td>Исходящий номер:</td>
+                <td>{{ messages.outgoing_number }}</td>
+            </tr>
+            {% endif %}
+            {% if messages.outgoing_date %}
+            <tr>
+                <td>Дата исходящего:</td>
+                <td>{{ messages.outgoing_date }}</td>
+            </tr>
+            {% endif %}
+            {% if messages.number_sign %}
+            <tr>
+                <td>Подписной номер:</td>
+                <td>{{ messages.number_sign }}</td>
+            </tr>
+            {% endif %}
+            {% if messages.date_sign %}
+            <tr>
+                <td>Дата подписи:</td>
+                <td>{{ messages.date_sign }}</td>
+            </tr>
+            {% endif %}
+            {% if messages.information %}
+            <tr>
+                <td>Полная информация от письме:</td>
+                <td>{{ messages.information }}</td>
+            </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <div class="text-center">
+            <h2>Форма для изменения письма</h2>
+        </div>
+        {% if error2 %}
+        <div class="alert alert-danger" role="alert">
+            {{ error2 }}
+        </div>
+        {% endif %}
+        {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endif %}
+        <form method="POST">
+            {% csrf_token%}
+            <input type="hidden" name="id_company" value="{{ company.id }}" required id="id_id_company">
+        {% if messages.incoming_number %}<label for="id_incoming_number" class="form-label">Входящий номер:</label> <input class="form-control me-2" type="text" name="incoming_number" maxlength="250" id="id_incoming_number">
+            {% else%}<label for="id_outgoing_number" class="form-label">Исходящий номер:</label><input class="form-control me-2" value="149/2/7" type="text" name="outgoing_number" maxlength="250" id="id_outgoing_number">{% endif %}
+        {% if messages.incoming_date %}<label for="id_incoming_date" class="form-label">Дата входящего:</label> <input class="form-control me-2" type="date"  name="incoming_date" id="id_incoming_date">
+            {% else%}<label for="id_outgoing_date" class="form-label">Дата исходящего:</label> <input class="form-control me-2" type="date" name="outgoing_date" id="id_outgoing_date">{% endif %}
+        {% if messages.number_sign %}<label for="id_number_sign" class="form-label">Подписной номер:</label> <input class="form-control me-2" type="text" name="number_sign" maxlength="250" id="id_number_sign">{% endif %}
+        {% if messages.date_sign%}<label for="id_date_sign" class="form-label">Дата подписи:</label> <input class="form-control me-2" type="date" name="date_sign" id="id_date_sign">{% endif %}
+        <label for="id_information" class="form-label">Информация:</label><textarea class="form-control me-2" name="information" cols="40" rows="10" id="id_information"></textarea>
+            <button type="submit" class="btn btn-dark" style="margin-top: 15px;"
+                    onclick="return confirm('Вы уверены, что хотите редактировать письмо?')">Редактировать письмо
+            </button>
+        </form>
+        <form method="POST" action="{% url 'deletemessage' messages.id %}">
+            {% csrf_token%}
+            <button type="submit" class="btn btn-danger" style="margin-top: 15px"
+                    onclick="return confirm('Вы уверены, что хотите удалить письмо?')">Удалить письмо
+            </button>
+        </form>
+    </div>
 </div>
-{% endif %}
-<form method="POST">
-    {% csrf_token%}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-dark" onclick="return confirm('Вы уверены, что хотите редактировать письмо?')">Редактировать письмо</button>
-</form>
-
-<form method="POST" action="{% url 'deletemessage' messages.id %}">
-    {% csrf_token%}
-<button type="submit" class="btn btn-danger" style="margin-top: 15px" onclick="return confirm('Вы уверены, что хотите удалить письмо?')">Удалить письмо</button>
-</form>
-
-{% endblock %}
+    {% endblock %}

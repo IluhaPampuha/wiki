@@ -48,7 +48,7 @@ def serach_tool(request):
 def message(request, id_message):
     messages = get_object_or_404(Messages, pk=id_message)
     id = messages.id_company
-    if messages.incoming_number == "":
+    if not messages.incoming_number:
         form = OutgoingForm(instance=messages)
     else:
         form = IncomingForm(instance=messages)
@@ -56,7 +56,7 @@ def message(request, id_message):
         return render(request, "wiki_app/message.html", {"messages": messages, "form": form})
     else:
         try:
-            if messages.incoming_number == "":
+            if not messages.incoming_number:
                 form = OutgoingForm(request.POST, instance=messages)
                 newoutgoing = form.save(commit=False)
                 newoutgoing.user = request.user
@@ -155,9 +155,18 @@ def loginuser(request):
 def deletemessage(request, id_message):
     messages = get_object_or_404(Messages, pk=id_message)
     id = messages.id_company
-    if request.method == "POST":
-        messages.delete()
-        return redirect(f"/company{id}/")
-
+    if not messages.incoming_number:
+        form = OutgoingForm(instance=messages)
+    else:
+        form = IncomingForm(instance=messages)
+    if request.user.is_active:
+        if request.method == "POST":
+            messages.delete()
+            return redirect(f"/company{id}/")
+    else:
+        try:
+            raise ValueError("Поля поиска пустое")
+        except ValueError:
+            return render(request, "wiki_app/message.html", {"messages": messages, "form": form, "error2": "Для удаления письма необходимо авторизоваться"})
 
 

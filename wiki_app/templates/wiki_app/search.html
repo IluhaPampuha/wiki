@@ -1,8 +1,13 @@
 {% extends 'wiki_app/base.html' %}
-{% block title %}Страница входа пользователя{% endblock %}
+{% block title %}Поиск{% endblock %}
 {% block content %}
+{% load static%}
+<div class="text-center">
 <h1>Результат поиска:</h1>
-<h2>1.По письмам:</h2>
+</div>
+<div class="text-center">
+<h2>1. По письмам:</h2>
+</div>
 {% if messages %}
 <table class="table text-center">
   <thead class="thead-dark">
@@ -27,10 +32,14 @@
   </tbody>
 </table>
 {% else %}
-<h3>Поиск не дал результата</h3>
+<div class="text-center">
+    <h3>Поиск по письмам не дал результата</h3>
+    <img src="{% static 'wiki/hands.jpg' %}" width="350" height="250">
+</div>
 {% endif %}
-<br>
-<h2>2.По организациям:</h2>
+<div class="text-center">
+<h2>2. По организациям:</h2>
+</div>
 {% if company %}
 <div class="list-group list-group-flush">
 {% for company in company %}
@@ -38,6 +47,9 @@
 {% endfor %}
 </div>
 {% else %}
-<h3>Поиск не дал результата</h3>
+<div class="text-center">
+    <h3>Поиск по организациям не дал результата</h3>
+    <img src="{% static 'wiki/hands.jpg' %}" width="350" height="250">
+</div>
 {% endif %}
 {% endblock %}

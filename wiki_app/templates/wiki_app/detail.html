@@ -1,31 +1,50 @@
 {% extends 'wiki_app/base.html' %}
 {% block title %}Письма {{ company.name }}{% endblock %}
-
+{% load static %}
 {% block content %}
-<a href="{% url 'incoming' company.id %}" class="btn btn-dark" style="margin-top: 15px; margin-bottom: 15px;">Добавить входящее письмо</a>
-<a href="{% url 'outgoing' company.id %}" class="btn btn-dark" style="margin-top: 15px; margin-bottom: 15px;">Добавить исходящее письмо</a>
+<a href="{% url 'incoming' company.id %}" class="btn btn-dark" style="margin-top: 15px; margin-bottom: 15px;">Добавить
+    входящее письмо</a>
+<a href="{% url 'outgoing' company.id %}" class="btn btn-dark" style="margin-top: 15px; margin-bottom: 15px;">Добавить
+    исходящее письмо</a>
+{% if messages %}
 <div class="text-center"><h1>Письма {{ company.name }}</h1></div>
-<table class="table text-center">
-  <thead class="thead-dark">
+<table class="table table-striped text-center">
+    <thead class="thead-dark">
     <tr>
-      <th scope="col">Тип письма</th>
-      <th scope="col">Номер</th>
-      <th scope="col">Дата</th>
-      <th scope="col">Содержание</th>
+        <th scope="col">Тип письма</th>
+        <th scope="col">Номер</th>
+        <th scope="col">Дата</th>
+        <th scope="col">Содержание</th>
         <th scope="col">Исполнитель</th>
     </tr>
-  </thead>
+    </thead>
     <tbody>
-{% for message in messages %}
+    {% for message in messages %}
     <tr>
-   {% if message.incoming_number %}<td>Входящее</td><td>{{ message.incoming_number }}</td>
-        {% else %}<td>Исходящее</td><td>{{message.outgoing_number}}</td>{% endif %}
-        {% if message.incoming_date is not Null %}<td>{{ message.incoming_date }}</td>{% endif %}
-        {% if message.outgoing_date is not Null %}<td>{{ message.outgoing_date }}</td>{% endif %}
-        <td><a href="{% url 'message' message.id %}">{{ message.information|truncatechars:100 }}</a></td><td>{{message.user}}</td>
+        {% if message.incoming_number %}
+        <td>Входящее</td>
+        <td>{{ message.incoming_number }}</td>
+        {% else %}
+        <td>Исходящее</td>
+        <td>{{message.outgoing_number}}</td>
+        {% endif %}
+        {% if message.incoming_date is not Null %}
+        <td>{{ message.incoming_date }}</td>
+        {% endif %}
+        {% if message.outgoing_date is not Null %}
+        <td>{{ message.outgoing_date }}</td>
+        {% endif %}
+        <td><a href="{% url 'message' message.id %}">{{ message.information|truncatechars:100 }}</a></td>
+        <td>{{message.user}}</td>
     </tr>
     {% endfor %}
-  </tbody>
+    </tbody>
 </table>
+{% else %}
+<div class="text-center">
+    <h3>Информация о письмах отсутствует</h3>
+    <img src="{% static 'wiki/hands.jpg' %}" width="350" height="250">
+</div>
 
+{% endif %}
 {% endblock %}
